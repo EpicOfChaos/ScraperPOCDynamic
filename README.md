@@ -1,5 +1,5 @@
-# NodeTypescriptTemplate
-Node template project that has Typescript and Inversify (IOC library) setup and configured. Uses Mocha for tests. Works on both Windows and UNIX based systems.
+# ScraperPOC
+A coordinator for various web site scraping.
 
 ---
 ## Installation

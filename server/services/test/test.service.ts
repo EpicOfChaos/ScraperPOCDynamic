@@ -1,10 +1,12 @@
 import {injectable} from 'inversify'
+import {GoogleScraper} from 'google-module-poc'
 
 @injectable()
 export class TestService {
+    constructor(private googleScraper: GoogleScraper) {}
 
     health(){
-        return "OK"
+        return this.googleScraper.doIt()
     }
 
     prime(n: number) {
