@@ -17,6 +17,7 @@
     "express": "~4.14.1",
     "google-module-poc": "1.0.0",
     "inversify": "^3.3.0",
+    "node-horseman": "^3.2.0",
     "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {

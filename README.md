@@ -34,4 +34,4 @@ npm run test-watch
 npm run start-dev
 ```
 
-You are now ready to make changes and see live changes, try playing with the health or prime functions in the test.service.ts (TestService)
+You are now ready to make changes and see live changes, try playing with the health or prime functions in the scraper-coordinator.service.ts (TestService)

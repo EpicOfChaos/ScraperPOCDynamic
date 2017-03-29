@@ -3,7 +3,9 @@ import cookieParser = require('cookie-parser')
 import bodyParser = require('body-parser')
 import {HttpError} from './errors/http-error'
 import {rootRoutes} from './routes/index'
+import {container} from './ioc'
 
+const nodeCleanup = require('node-cleanup')
 export const app = express()
 
 app.use(bodyParser.json())
@@ -28,4 +30,12 @@ app.use(function (err: any, req: express.Request, res: express.Response, next: e
     // render the error page
     res.status(err.status || 500)
     res.send(err.message)
+})
+
+nodeCleanup((exitCode: any, signal: any) => {
+    if (signal) {
+        process.kill(process.pid, signal)
+        nodeCleanup.uninstall()
+        return false
+    }
 })
