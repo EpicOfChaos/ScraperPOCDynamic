@@ -41,8 +41,8 @@ You are now ready to make changes and see live changes, try playing with the hea
 ### Google
 Execute url http://localhost:3000/process/GOOGLE in a browser
 
-### 
+### Bing
 Execute url http://localhost:3000/process/BING in a browser
 
-###
+### Ask.com
 Execute url http://localhost:3000/process/ASK in a browser
