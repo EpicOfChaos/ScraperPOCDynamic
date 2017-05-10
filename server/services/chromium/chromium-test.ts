@@ -9,28 +9,38 @@ export class ChromiumTest {
     constructor() {}
 
     async test(){
-        return new Promise((resolve, reject) => {
-            CDP(async (client:any) => {
-                // Extract used DevTools domains.
+        let target = await CDP.New({
+            url: 'http://www.ask.com/'
+        })
+        console.log(target)
+
+        let client = await CDP({
+            target: target
+        })
+        // console.log(client)
+        // return new Promise((resolve, reject) => {
+        //     CDP.New(async (client:any) => {
+        //         // Extract used DevTools domains.
                 const {Page, Runtime, Input} = client
                 await Page.enable()
-                await Page.navigate({url: 'http://www.ask.com/'})
+        //         await Page.navigate({url: 'http://www.ask.com/'})
                 await this.pageLoaded(Page)
-
+        //
                 console.log('Lets do stuff')
                 await this.type(Runtime, Input, 'input[name="q"]', 'epicpockets.net')
                 await this.click(Runtime, Input, '#PartialHome-form .sb-button')
                 await this.waitForElement(Runtime,'.PartialSearchResults-item-title')
                 let count = await this.count(Runtime, '.PartialSearchResults-item-title')
-                client.close()
-                console.log('Results: ' + count)
-                resolve(count)
-            }).on('error', (err:any) => {
-                console.error('Cannot connect to browser:', err)
-                reject(err)
-            })
-        })
 
+                console.log('Results: ' + count)
+
+        //     }).on('error', (err:any) => {
+        //         console.error('Cannot connect to browser:', err)
+        //         reject(err)
+        //     })
+        // })
+        await CDP.Close({id: target.id})
+        return count
     }
 
     async count(Runtime: any, selector:string) {
@@ -39,7 +49,6 @@ export class ChromiumTest {
 
     async executeJQuery(Runtime:any, jqueryStatement: string){
         let evalResult = await Runtime.evaluate({expression: jqueryStatement, returnByValue: true})
-        console.log(evalResult)
         return evalResult.result.value
     }
 
@@ -96,7 +105,7 @@ export class ChromiumTest {
             if(response > 0){
                 return
             }
-            console.log(`Waiting for ${selector} ${waitDuration}/${maxWait}`)
+
             await delay(interval)
             waitDuration += interval
         } while(waitDuration < maxWait)

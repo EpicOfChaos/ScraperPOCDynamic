@@ -8,6 +8,7 @@ rootRoutes.get('/health', function (req: express.Request, res: express.Response,
 })
 
 rootRoutes.get('/process/:type', async function (req: express.Request, res: express.Response, next: express.NextFunction) {
+    console.log('Req to process: ' + req.params.type)
     try {
         let testService = container.get<ScraperCoordinatorService>(ScraperCoordinatorService)
         let data = await testService.process(req.params.type)
