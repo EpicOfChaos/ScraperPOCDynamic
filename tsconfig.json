@@ -7,7 +7,8 @@
         "outDir": "./dist-server",
         "experimentalDecorators": true,
         "target": "es6",
-        "emitDecoratorMetadata": true
+        "emitDecoratorMetadata": true,
+        "sourceMap": true
     },
     "filesGlob": [
         "server/**/*.ts"
