@@ -1,10 +1,11 @@
 import {injectable} from "inversify";
 import {Chrome} from "./chrome";
+import {ConfigService} from "../config/config.service";
 const CDP = require('chrome-remote-interface')
 
 @injectable()
 export class ChromePoolService {
-    constructor() {}
+    constructor(private configService: ConfigService) {}
 
     /*
     in the future this could use the CDP.List to determine if it should give out another
@@ -20,6 +21,7 @@ export class ChromePoolService {
             target: target
         })
         await client.Page.enable()
-        return new Chrome(target.id, client, CDP)
+
+        return new Chrome(target.id, client, CDP, this.configService.config.dataDir)
     }
 }

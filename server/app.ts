@@ -6,6 +6,7 @@ import {rootRoutes} from './routes/index'
 import {container} from './ioc'
 
 const nodeCleanup = require('node-cleanup')
+const {ChromeLauncher} = require('lighthouse/lighthouse-cli/chrome-launcher')
 export const app = express()
 
 app.use(bodyParser.json())
@@ -32,6 +33,10 @@ app.use(function (err: any, req: express.Request, res: express.Response, next: e
     res.send(err.message)
 })
 
+// launchChrome(false).then((launcher: any) => {
+//     console.log('Launched chrome!')
+// })
+
 nodeCleanup((exitCode: any, signal: any) => {
     if (signal) {
         process.kill(process.pid, signal)
@@ -39,3 +44,22 @@ nodeCleanup((exitCode: any, signal: any) => {
         return false
     }
 })
+
+function launchChrome(headless = true) {
+    const launcher = new ChromeLauncher({
+        port: 9222,
+        autoSelectChrome: true, // False to manually select which Chrome install.
+        additionalFlags: [
+            '--window-size=1280,1096',
+            '--disable-gpu',
+            headless ? '--headless' : ''
+        ]
+    })
+
+    return launcher.run().then(() => launcher)
+        .catch((err: any) => {
+            return launcher.kill().then(() => { // Kill Chrome if there's an error.
+                throw err
+            }, console.error)
+        })
+}
