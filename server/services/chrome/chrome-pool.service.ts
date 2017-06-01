@@ -12,16 +12,46 @@ export class ChromePoolService {
     instance based on how many are still open. Also many this should explore browser context?
      */
     async getChromeInstance(url:string){
-        let target = await CDP.New({
-            url: url
+        let targetClient = await CDP({tab: 'ws://localhost:9222/devtools/browser'})
+        console.log('new client created.')
+        let {Target} = targetClient
+        let browserContextResponse = await Target.createBrowserContext({})
+        console.log('Created Browser Context' + JSON.stringify(browserContextResponse))
+        let targetResponse = await Target.createTarget({
+            url: url,
+            width: 1280,
+            height: 1096,
+            browserContextId: browserContextResponse.browserContextId
         })
-        console.log('Created Target')
+        console.log('Target Response' + JSON.stringify(targetResponse))
 
+        // let attachResponse = await Target.attachToTarget({
+        //     targetId: targetResponse.targetId
+        // })
+        //
+        // console.log('Attach Response' + JSON.stringify(attachResponse))
+        //
+        // await Target.activateTarget({
+        //     targetId: targetResponse.targetId
+        // })
+        // console.log('Activated Target')
+        // let target = await CDP.New({
+        //     url: url
+        // })
+        // console.log('Created Target')
+        //
+        let targets = await CDP.List()
+        console.log(JSON.stringify(targets))
         let client = await CDP({
-            target: target
+            target: targets.filter((target) => {
+                return target.id = targetResponse.targetId
+            })[0]
         })
         await client.Page.enable()
+        await client.Runtime.enable()
+        await client.Network.enable()
 
-        return new Chrome(target.id, client, CDP, this.configService.config.dataDir)
+        console.log('Page Enabled')
+        return new Chrome(targetResponse.targetId, client, CDP, this.configService.config.dataDir)
     }
 }

@@ -33,9 +33,9 @@ app.use(function (err: any, req: express.Request, res: express.Response, next: e
     res.send(err.message)
 })
 
-// launchChrome(false).then((launcher: any) => {
-//     console.log('Launched chrome!')
-// })
+launchChrome(true).then((launcher: any) => {
+    console.log('Launched chrome!')
+})
 
 nodeCleanup((exitCode: any, signal: any) => {
     if (signal) {

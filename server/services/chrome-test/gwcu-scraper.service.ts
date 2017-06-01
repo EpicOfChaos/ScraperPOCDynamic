@@ -1,7 +1,7 @@
-import {injectable} from "inversify";
-import {ChromePoolService} from "../chrome/chrome-pool.service";
-import {Chrome} from "../chrome/chrome";
-import {BankInfo} from "../../repositories/bank-info/bank-info";
+import {injectable} from 'inversify'
+import {ChromePoolService} from '../chrome/chrome-pool.service'
+import {BankInfo} from '../../repositories/bank-info/bank-info'
+import {Chrome} from '../chrome/chrome'
 
 @injectable()
 
@@ -10,10 +10,11 @@ export class GWCUScraperService {
     }
 
     async process(bankInfo: BankInfo) {
-        console.log(bankInfo)
+        // console.log(bankInfo)
         let chromeInstance = await this.chromePoolService.getChromeInstance('https://online.gwcu.org/User/AccessSignin/Start')
         try {
-            await chromeInstance.pageLoaded()
+            console.log('Have chrome instance')
+            await chromeInstance.waitForElement('#UsernameField', 10000)
             await chromeInstance.clearCookies()
             console.log('Cleared cookies')
             await chromeInstance.setCookies('https://online.gwcu.org', bankInfo.cookies)
@@ -48,8 +49,11 @@ export class GWCUScraperService {
                 success: true,
                 cookies: cookies
             }
+        } catch(err){
+            await chromeInstance.saveScreenshot()
+            throw err
         } finally {
-            // await chromeInstance.close()
+            await chromeInstance.close()
         }
     }
 }

@@ -145,13 +145,6 @@ export class Chrome {
         } while(waitDuration < maxWait)
         console.log('Timeout waiting for element: ' + selector)
 
-        // let pdfResponse = await this.Page.printToPDF()
-        // console.log(pdfResponse)
-        // let pdfFileName = `${this.dataDir}timeout_${(new Date).getTime()}.pdf`
-        // await fs.writeFile(pdfFileName, pdfResponse.data, {
-        //     encoding: 'base64'
-        // })
-        // console.log(`Saved timeout screenshot to: ${pdfFileName}`)
         throw new Error('Timeout waiting for element: ' + selector)
     }
 
@@ -161,5 +154,18 @@ export class Chrome {
 
     async close(){
         await this.CDP.Close({id: this.targetId})
+    }
+
+    async saveScreenshot(){
+        let pdfResponse = await this.Page.printToPDF()
+        let pdfFileName = `${this.dataDir}timeout_${(new Date).getTime()}.pdf`
+        await fs.writeFile(pdfFileName, pdfResponse.data, {
+            encoding: 'base64'
+        })
+        console.log(`Saved timeout screenshot to: ${pdfFileName}`)
+    }
+
+    async saveContent() {
+
     }
 }
