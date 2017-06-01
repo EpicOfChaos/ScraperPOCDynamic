@@ -45,9 +45,12 @@ export class GWCUScraperService {
             console.log('Successfully downloaded transactions.')
 
             let cookies = await chromeInstance.getCookies()
+            let validCookies = cookies.filter((cookie) => {
+                return cookie.name !== 'Jwaala.Site.User'
+            })
             return {
                 success: true,
-                cookies: cookies
+                cookies: validCookies
             }
         } catch(err){
             await chromeInstance.saveScreenshot()

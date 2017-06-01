@@ -25,27 +25,13 @@ export class ChromePoolService {
         })
         console.log('Target Response' + JSON.stringify(targetResponse))
 
-        // let attachResponse = await Target.attachToTarget({
-        //     targetId: targetResponse.targetId
-        // })
-        //
-        // console.log('Attach Response' + JSON.stringify(attachResponse))
-        //
-        // await Target.activateTarget({
-        //     targetId: targetResponse.targetId
-        // })
-        // console.log('Activated Target')
-        // let target = await CDP.New({
-        //     url: url
-        // })
-        // console.log('Created Target')
-        //
         let targets = await CDP.List()
-        console.log(JSON.stringify(targets))
+        let target = targets.filter((target) => {
+            return target.id === targetResponse.targetId
+        })[0]
+        console.log('Found Target: ' + JSON.stringify(target))
         let client = await CDP({
-            target: targets.filter((target) => {
-                return target.id = targetResponse.targetId
-            })[0]
+            target: target
         })
         await client.Page.enable()
         await client.Runtime.enable()
