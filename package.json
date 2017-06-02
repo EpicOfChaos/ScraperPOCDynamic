@@ -1,5 +1,5 @@
 {
-  "name": "scrapper-poc",
+  "name": "scrapper-poc-dynamic",
   "version": "1.0.0",
   "scripts": {
     "start": "node dist-server/bin/index.js",
